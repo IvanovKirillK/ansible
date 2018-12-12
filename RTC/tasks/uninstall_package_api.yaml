@@ -1,0 +1,4 @@
+---
+- name: uninstall old {{ api_name }} api
+  command: pip3 -y uninstall {{ api_name }}
+  sudo: true

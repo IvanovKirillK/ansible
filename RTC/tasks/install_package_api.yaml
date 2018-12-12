@@ -1,0 +1,36 @@
+---
+- name: copy {{ archive_name }}
+  copy:
+    src: /etc/ansible/src/{{ archive_name }}
+    dest: "{{ src_path }}"
+
+- name: prepare directory {{ dest_path }}
+  file:
+      path: "{{ dest_path }}"
+      state: directory
+
+- name: untar {{ archive_name }}
+  unarchive:
+      src: "{{ src_path ~ archive_name }}"
+      dest: "{{ dest_path }}"
+      remote_src: yes
+
+- name: install new api
+  command: chdir="{{ dest_path ~ sub_path }}" pip3 install .
+
+- name: restart rt-wsgi service
+  service:
+      name: rt-wsgi
+      state: restarted
+
+- name: clear {{ archive_name }} 
+  file:
+    path: "{{ src_path ~ archive_name }}"
+    state: absent
+
+- name: clear {{ dest_path}}  
+  file:
+    path: "{{ dest_path }}"
+    state: absent  
+
+  sudo: true

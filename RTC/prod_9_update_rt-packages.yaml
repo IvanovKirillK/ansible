@@ -1,0 +1,32 @@
+---
+- name: Upgrade rtadapters
+  hosts: TP1234
+  tasks:
+  - name: Install "{{ item.name }}"  
+    include: tasks/install_package.yaml
+      package_name={{ item.name }}
+      version={{ item.version }}
+      src_path=/home/pi/
+    with_list: 
+      - { name: 'rtadapter-digitalio', version: '-20180419.deb' } 
+      - { name: 'rtadapter-display', version: '-20180419.deb' }
+      - { name: 'rtadapter-quasar', version: '-20180419.deb' }  
+      - { name: 'rtadapter-relay', version: '-20180419.deb' }  
+      - { name: 'rtadapter-rs485', version: '-20180419.deb' }  
+      - { name: 'rtadapter-tdegree', version: '-20180419.deb' }  
+      - { name: 'rtcomponent-rfidreader', version: '-20180419.deb' }
+      - { name: 'rtcomponent-incident', version: '-20180420.deb' }  
+      - { name: 'rtconnector-gollard-vision', version: '-20180419.deb' }
+      - { name: 'rtcomponent-keepalive', version: '-20180420.deb' }         
+
+
+
+
+
+
+
+
+  
+
+ 
+

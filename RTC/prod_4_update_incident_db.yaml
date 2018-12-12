@@ -1,0 +1,92 @@
+---
+- name: Update incident DB
+  hosts: TP1234
+  tasks:
+  - name: copy db schema
+    copy:
+      src: /etc/ansible/src/database.tar.gz
+      dest: /home/pi/
+      owner: root
+      group: root
+      mode: 0644
+    sudo: true
+
+  - name: copy incident config
+    copy:
+      src: /etc/ansible/src/{{ var_name }}.tar.gz
+      dest: /home/pi/
+      owner: root
+      group: root
+      mode: 0644
+    sudo: true
+
+  - name: create db directory
+    file:
+      path: /home/pi/incident
+      state: directory
+
+  - name: create incident directory
+    file:
+      path: /tmp/database/incident/
+      state: directory
+
+  - name: prepare database
+    unarchive:
+      src: /home/pi/database.tar.gz
+      dest: /tmp/database/incident/
+      remote_src: yes
+    sudo: true  
+
+  - name: prepare data
+    unarchive:
+      src: /home/pi/{{ var_name }}.tar.gz
+      dest: /home/pi/incident/
+      remote_src: yes
+    sudo: true  
+
+  - name: load data
+    command: chdir=/usr/local/rtip/loader bash create_db.sh 127.0.0.1 incident postgres postgres /home/pi/incident 5432 /tmp/database/incident/database
+    sudo: true
+    register: out
+  - debug: var=out.stdout_lines
+
+#  - name: Set amqp
+#    lineinfile:
+#      dest: /etc/rtip/.env
+#      regexp: "{{ item.regexp }}"
+#      line: "{{ item.line }}"
+#    with_items:
+#     - { regexp: 'export AMQP_URI=amqp://guest:guest@{{ var_name }}:5672', line: 'export AMQP_URI=amqp://guest:guest@127.0.0.1:5672'}
+#    sudo: true
+
+  - name: stop incident_updater
+    command: /etc/init.d/incident_updater stop
+    sudo: true
+        
+  - name: stop incident
+    command: /etc/init.d/incident stop
+    sudo: true
+  
+  - name: clear after yourself
+    file:
+     path: /tmp/database/incident/
+     state: absent
+    file:
+      path: /home/pi/incident
+      state: absent
+    file:
+      path: /home/pi/database.tar.gz
+      state: absent
+    file:
+      path: /home/pi/{{ var_name }}.tar.gz
+      state: absent
+
+  - name: wait for service restart
+    wait_for: timeout=15
+    delegate_to: localhost
+
+  - name: check service
+    command: /etc/init.d/incident status
+    register: out
+    sudo: true
+  - debug: var=out.stdout_lines

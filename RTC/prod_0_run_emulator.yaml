@@ -1,0 +1,6 @@
+---
+- name: Upload and run access emulator
+  hosts: controllers-MKS controllers-UES
+  tasks:
+  - name: run emulators
+    command: python3.6 /home/pi/controllers/access_emulator.py

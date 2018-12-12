@@ -1,0 +1,20 @@
+---
+- name: Upgrade rtadapters
+  hosts: TP1234
+  tasks:
+  - name: Delete old api "{{ item.name }}" 
+    include: tasks/uninstall_package_api.yaml
+      api_name={{ item.name}}
+    with_list:
+      - { name: 'component-incident' }
+      - { name: 'connector-gollard-vision' }
+
+  - name: Install new api "{{ item.name }}"
+    include: tasks/install_package_api.yaml
+      archive_name={{ item.arch_name }}
+      src_path=/home/pi/
+      dest_path=/home/pi/{{ item.dest }}
+      sub_path={{ item.sub_path }}
+    with_list:
+      - { name: 'component-incident', arch_name: 'incident-api.tar', dest: 'incident_api/', sub_path: 'incident/api/' }
+      - { name: 'connector-gollard-vision', arch_name: 'gollard-api.tar', dest: 'gollard_api', sub_path: 'gollard/api/' }

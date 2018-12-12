@@ -1,0 +1,48 @@
+---
+- name: Upgrade adapter configs
+  hosts: TP6460 
+  tasks:
+  - name: copy adapter config
+    copy:
+      src: /etc/ansible/src/{{ var_name }}_incidents.tar.gz
+      dest: /home/pi/
+      owner: pi
+      group: pi
+      mode: 0644
+    sudo: true
+  
+  - name: delete old archive
+    file:
+      path: /etc/rtip/incident/
+      state: absent
+    sudo: true  
+
+  - name: upload configs
+    unarchive:
+      src: /home/pi/{{ var_name }}_incidents.tar.gz
+      dest: /etc/rtip/
+      remote_src: yes
+    sudo: true
+
+  - name: restart components
+    service:
+      name: rtcomponent-incident-rfidreader
+      state: reloaded
+    sudo: true
+    service:
+      name: rtcomponent-incident-tdegree
+      state: reloaded
+    sudo: true
+    service:
+      name: rtcomponent-incident-digitalio
+      state: reloaded
+    sudo: true
+    service:
+      name: rtcomponent-incident-quasar
+      state: reloaded
+    sudo: true  
+
+  - name: clear after yourself
+    file:
+     path: /home/pi/{{ var_name }}_incidents.tar.gz
+     state: absent       

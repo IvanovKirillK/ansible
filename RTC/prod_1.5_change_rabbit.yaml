@@ -1,0 +1,16 @@
+---
+- name: Upgrade image
+  hosts: TP6460
+  tasks:
+  - name: Reconfigure
+    command: dpkg-reconfigure rabbitmq-server
+    sudo: true  
+    
+  - name: Configure .env
+    lineinfile:
+      dest: /etc/rtip/.env
+      regexp: "{{ item.regexp }}"
+      line: "{{ item.line }}"
+    with_items:
+     - { regexp: '^export RTPLATFORM_UPPER_HOST="10.100.126.64"', line: 'export RTPLATFORM_UPPER_HOST="172.30.32.200"'}
+    sudo: true 

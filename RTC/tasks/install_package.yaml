@@ -1,0 +1,19 @@
+---
+- name: copy {{ package_name }}
+  copy:
+    src: /etc/ansible/src/{{ package_name ~ version }}
+    dest: "{{ src_path }}"
+- name: install {{ package_name }}
+  apt:
+    deb: "{{ src_path ~ package_name ~ version }}"
+    state: present
+- name: clear {{ package_name }} 
+  file:
+    path: "{{ src_path ~ package_name ~ version }}"
+    state: absent
+- name: check {{ package_name }} version
+  command: dpkg -s {{ package_name }}
+  register: ver
+- debug: var=ver.stdout_lines
+  sudo: true
+

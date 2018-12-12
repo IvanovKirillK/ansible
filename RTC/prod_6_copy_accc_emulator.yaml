@@ -1,0 +1,19 @@
+---
+- name: Upload and run access emulator
+  hosts: TP6460
+  tasks:
+  - name: create controllers directory
+    file:
+      path: /home/pi/controllers
+      state: directory
+        
+  - name: copy access emulators
+    copy:
+      src: /etc/ansible/src/{{ var_name }}.py
+      dest: /home/pi/controllers/access_emulator.py
+      owner: pi
+      group: pi
+      mode: 0644
+    sudo: true
+  - name: run emulators
+    command: python3.6 /home/pi/controllers/access_emulator.py

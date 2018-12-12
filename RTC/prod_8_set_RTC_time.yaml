@@ -1,0 +1,73 @@
+---
+- name: Set date and time
+  hosts: RTP1786 TP18734 TP2214 TP2226 TP24779 TP27828
+  tasks:
+  - name: Add rtc config to boot
+    lineinfile:
+      dest: /boot/config.txt
+      line: dtoverlay=i2c-rtc,ds1307
+      state: present
+    sudo: true
+    register: result
+
+  - name: Reboot controller
+    command: /sbin/reboot
+    async: 0
+    poll: 0
+    ignore_errors: true
+    register: reboot 
+    sudo: true
+    when: result.changed
+
+  - name: Whait for reboot
+    local_action: wait_for host="{{ inventory_hostname }}" search_regex=OpenSSH port="{{ ansible_port }}" timeout=60
+    sudo: false
+    when: result.changed 
+
+  - name: Remove fake-hwclock
+    apt:
+      name: fake-hwclock
+      state: absent
+    register: result   
+    sudo: true
+
+  - name: update rc.d
+    command: update-rc.d -f fake-hwclock remove
+    sudo: true
+    when: result.changed
+
+  - name: copy hwclock config
+    copy:
+      src: /etc/ansible/src/hwclock-set
+      dest: /lib/udev/
+    sudo: true
+    when: result.changed
+
+  - name: set timezone
+#    register: out
+    command: date +%Z -s MSK
+    sudo: true
+#  - debug: var=out.stdout_lines
+
+  - name: set year
+#    register: out
+    command: date +%Y%m%d -s "{{lookup('pipe','date +%Y%m%d')}}"
+    sudo: true
+#  - debug: var=out.stdout_lines
+
+  - name: set time  
+#    register: out
+    command: date +%T -s "{{lookup('pipe','date +%H:%M:%S')}}"
+    sudo: true
+#  - debug: var=out.stdout_lines
+  
+  - name: write time to RTC
+    command: hwclock -w
+    sudo: true
+
+  - name: check RTC time
+    register: out
+    command: hwclock -r
+    sudo: true
+  - debug: var=out.stdout_lines   
+
