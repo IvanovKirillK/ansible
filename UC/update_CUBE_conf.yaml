@@ -2,10 +2,18 @@
 - name: Update CUBE configuration
   hosts: CUBE
   tasks:
-  - name: Create backup
-  #TODO add current date to backup name
-    ios_config:
-      backup: yes
+  #- name: Create backup
+  #  ios_config:
+  #    backup: yes
+  - name: run show running-config on remote devices
+     ios_command:
+       lines: show running
+     register: config
+
+  - name: Save config to local file
+    copy:
+      content: "{{ config.stdout[0] }}"
+      dest: "/etc/ansible/backup/{{ inventory_hostname }}/running-config_{{ timestamp.stdout }}"
 
   - name: Configure translation rule 
     include: ./translation_rule.yaml
