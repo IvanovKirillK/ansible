@@ -1,0 +1,6 @@
+---
+- name: configure translation-profile {{ translation_profile_number }}
+  ios_config:
+    lines: translate {{ translation_direction }} {{ translation_rule_number }}
+    when: translation_direction is defined and translation_rule_number is defined
+    parrents: voice translation-profile {{ translation_profile_number }}
