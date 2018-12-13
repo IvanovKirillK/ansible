@@ -1,19 +1,19 @@
 ---
 - name: Update CUBE configuration
-  hosts: CUBE
+  hosts: GPB_CUBE
   tasks:
   #- name: Create backup
   #  ios_config:
   #    backup: yes
   - name: run show running-config on remote devices
-     ios_command:
-       lines: show running
-     register: config
+    ios_command:
+      commands: show running
+    register: config
 
   - name: Save config to local file
     copy:
       content: "{{ config.stdout[0] }}"
-      dest: "/etc/ansible/backup/{{ inventory_hostname }}/running-config_{{ timestamp.stdout }}"
+      dest: "/etc/ansible/backup/{{ inventory_hostname }}/running-config_{{lookup('pipe','date +%Y%m%d_%H:%M:%S')}}"
 
   - name: Configure translation rule 
     include: ./translation_rule.yaml
@@ -53,7 +53,6 @@
       answer_address={{ item.answer_address }}
       cucm_address={{ item.cucm_address }}
       codec_class_number={{ item.codec_class_number }}
-      cucm_address={{ item.cucm_address }}
       dialpeer_number={{ item.dialpeer_number }}
     with_list: 
       - { dialpeer_number: '3825991', dialpeer_description: 'Incoming_382599', answer_address: '382599....', translate_leg: 'incoming', translation_rule_number: '3825991', codec_class_number: '1' }

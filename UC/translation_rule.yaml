@@ -1,6 +1,6 @@
 ---
 - name: configure translation-rule {{ translation_rule_number }}
   ios_config:
-    lines: rule {{ rule_number }} {{ rule_pattern }}
-    when: rule_number is defined and rule_pattern is defined
-    parrents: voice translation-rule {{ translation_rule_number }}
+    commands: rule {{ rule_number }} {{ rule_pattern }}
+    #when: rule_number is defined and rule_pattern is defined
+    parents: voice translation-rule {{ translation_rule_number }}
