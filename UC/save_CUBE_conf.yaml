@@ -1,0 +1,7 @@
+---
+- name: Save CUBE configuration
+  hosts: GPB_CUBE
+  tasks:
+  - name: save config of {{ inventory_hostname }}
+    ios_command:
+      commands: copy running-config startup-config

@@ -2,19 +2,8 @@
 - name: Update CUBE configuration
   hosts: GPB_CUBE
   tasks:
-  # #run show run on a device
-  # - name: run show running-config on remote devices
-  #   ios_command:
-  #     commands: show running
-  #   register: config
 
-  # #save running-config on a local drive
-  # - name: Save config to local file
-  #   copy:
-  #     content: "{{ config.stdout[0] }}"
-  #     dest: "/etc/ansible/backup/{{ inventory_hostname }}/running-config_{{lookup('pipe','date +%Y%m%d_%H:%M:%S')}}"
-
-  - name: backup
+  - name: backup running config of the {{ inventory_hostname }}
     ios_config:
       backup: yes
 
@@ -73,3 +62,14 @@
       codec_class_number={{ item.codec_class_number }}
       dialpeer_number={{ item.dialpeer_number }}
     with_items: "{{ dialpeers }}" 
+
+  # show running config 
+  - name: show config of {{ inventory_hostname }}
+    ios_command:
+      commands: show running-config
+    register: config
+  - debug: var=config.stdout_lines
+
+  - name: rename variable files on localhost
+    local_action: command rename 's/\.yaml$/\.bak/' /home/kirill/ansible/UC/vars/*.yaml
+    ignore_errors: true

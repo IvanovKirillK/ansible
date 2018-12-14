@@ -1,17 +1,17 @@
 ---
 #register variable for for running_config check
-- name: set_translation_profile_var
+- name: set translation profile variable for future use
   set_fact:
     translation_profile_string: "voice translation-profile {{ translation_profile_number }}"
 
 #get running config, sort for translation_profile
-- name: get_running
+- name: get running config for translation profile {{ translation_profile_number }}
   register: translation_profile
   ios_command:
     commands: show run | i voice translation-profile {{ translation_profile_number }}
   
 
 #check if translation_profile exesits on device
-- name: check_translation_profile
+- name: check if translation profile {{ translation_profile_number }} exists on device
   when: translation_profile_string == translation_profile.stdout[0]
   fail: msg="!!! WARNING translation_profile {{ translation_profile_number }} exists on {{ inventory_hostname }}, please check config !!!"

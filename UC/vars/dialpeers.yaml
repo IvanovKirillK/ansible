@@ -6,15 +6,10 @@ dialpeers:
 #destination_pattern: 'xxxx'
 #uri_from: ''
 #translate_leg: ''
-#translation_rule_number: ''
+#translation_profile_number: ''
 #answer_address: ''
 #codec_class_number: ''
 #cucm_address: ''
-#####################################
-
-#####################################
-#Default: Do not delete!
-#  - dialpeer_number: 'not_set'
 #####################################
 
 #  - dialpeer_number: '3825991'
