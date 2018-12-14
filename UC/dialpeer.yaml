@@ -1,9 +1,18 @@
 ---
-- name: clear dialpeer {{ dialpeer_number }}
-  when: dialpeer_number is defined
-  ignore_errors: true
+# check if dialpeer exists
+- name: get_dialpeer
+  #register variable for output
+  set_fact:
+    dialpeer_string = dial-peer voice {{ dialpeer_number }} voip
+  register: dialpeer
   ios_config:
-    lines: no dial-peer voice {{ dialpeer_number }} voip
+    lines: show run | i dial-peer voice {{ dialpeer_number }} voip
+
+- name: check_dialpeer
+  # if the community is not in running configuration...
+  fail: msg="!!!dial-peer exist, please chek config!!!"
+  when: ("dialpeer_string == dialpeer.stdout_lines[0]")
+  # ...set a variable with name "changed"...
 
 - name: add dialpeer {{ dialpeer_number }}
   when: dialpeer_number is defined
