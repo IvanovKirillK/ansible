@@ -1,4 +1,17 @@
 dialpeers:
+#####################################
+#Avaliable parameters for dialpeer:
+#dialpeer_number: 'xxxx'
+#dialpeer_description: 'xxxx'
+#destination_pattern: 'xxxx'
+#uri_from: ''
+#translate_leg: ''
+#translation_rule_number: ''
+#answer_address: ''
+#codec_class_number: ''
+#cucm_address: ''
+#####################################
+
 #  - dialpeer_number: '3825991'
 #    dialpeer_description: 'Incoming_382599'
 #    answer_address: '382599....'

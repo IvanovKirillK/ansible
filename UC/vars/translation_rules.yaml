@@ -1,4 +1,11 @@
 translation_rules:
+###########################################
+#Avaliable parameters for translation rule:
+#translation_rule_number: 'xxxx'
+#rule_number: 'x'
+#rule_pattern: 'xxxx'
+###########################################
+
 #  - translation_rule_number: '3000001'
 #    rule_number: '1'
 #    rule_pattern: '/^\(...\)\(...\)\(....\)/ /\1\3/'

@@ -1,4 +1,11 @@
 translation_profiles:
+##############################################
+#Avaliable parameters for translation profile:
+#translation_profile_number: 'xxxx'
+#translation_direction: 'callind\called'
+#translation_rule_number: 'xxxx'
+##############################################
+
 #  - translation_profile_number: '3825991'
 #    translation_direction: 'calling'
 #    translation_rule_number: '3000001'
