@@ -2,53 +2,61 @@
 - name: Update CUBE configuration
   hosts: GPB_CUBE
   tasks:
-  #- name: Create backup
-  #  ios_config:
-  #    backup: yes
+  #run show run on a device
   - name: run show running-config on remote devices
     ios_command:
       commands: show running
     register: config
 
+  #save running-config on a local drive
   - name: Save config to local file
     copy:
       content: "{{ config.stdout[0] }}"
       dest: "/etc/ansible/backup/{{ inventory_hostname }}/running-config_{{lookup('pipe','date +%Y%m%d_%H:%M:%S')}}"
 
+  #load variables for translations and dial-peers
+  - name: Load vars
+    include_vars:
+      dir: vars/
+      depth: 1
+
+  #check if specified translations rules are already exist
+  - name: Check translation rules in new config
+    include: tasks/check_translation_rule.yaml
+      translation_rule_number={{ item.translation_rule_number }}
+    with_items: "{{ translation_rules }}" 
+
+  #check if specified translations profiles are already exist
+  - name: Check translation profiles in new config
+    include: tasks/check_translation_profile.yaml
+      translation_profile_number={{ item.translation_profile_number }}
+    with_items: "{{ translation_profiles }}" 
+
+  #check if specified dial-peers are already exist
+  - name: Check dialpeers in new config
+    include: tasks/check_dialpeer.yaml
+      dialpeer_number={{ item.dialpeer_number }}
+    with_items: "{{ dialpeers }}" 
+
+  #add translation rules one by one
   - name: Configure translation rule 
-    include: ./translation_rule.yaml
+    include: tasks/translation_rule.yaml
       translation_rule_number={{ item.translation_rule_number }}
       rule_number={{ item.rule_number }}
       rule_pattern={{ item.rule_pattern }}
-    with_list: 
-      - { translation_rule_number: '3000001', rule_number: '1', rule_pattern: '/^\(...\)\(...\)\(....\)/ /\1\3/' }
-      - { translation_rule_number: '3825991', rule_number: '1', rule_pattern: '/^382..../ /\0/' }
-      - { translation_rule_number: '3825991', rule_number: '2', rule_pattern: '/.+/ /382599\0/' }
-      - { translation_rule_number: '3820010', rule_number: '1', rule_pattern: '/^382/ //' } 
-      - { translation_rule_number: '3000002', rule_number: '1', rule_pattern: '/^3../ /../' }
-      - { translation_rule_number: '3820001', rule_number: '1', rule_pattern: '/^….$/ /382\0/' }
-      - { translation_rule_number: '3820002', rule_number: '1', rule_pattern: '/^….$/ /382000\0/' }    
-    register: out
-  - debug: var=out.stdout_lines
+    with_items: "{{ translation_rules }}"  
 
+  #add translation profiles one by one  
   - name: Configure translation profile 
-    include: ./translation_profile.yaml
+    include: tasks/translation_profile.yaml
       translation_profile_number={{ item.translation_profile_number }}
       translation_direction={{ item.translation_direction }}
       translation_rule_number={{ item.translation_rule_number }}
-    with_list: 
-      - { translation_profile_number: '3825991', translation_direction: 'calling', translation_rule_number: '3000001' }
-      - { translation_profile_number: '3825991', translation_direction: 'called', translation_rule_number: '3825991' }
-      - { translation_profile_number: '3825990', translation_direction: 'calling', translation_rule_number: '3820010' }
-      - { translation_profile_number: '3825990', translation_direction: 'called', translation_rule_number: '3000002' }
-      - { translation_profile_number: '3820001', translation_direction: 'calling', translation_rule_number: '3820001' }
-      - { translation_profile_number: '3820002', translation_direction: 'called', translation_rule_number: '3820002' }
-    register: out
-  - debug: var=out.stdout_lines
+    with_items: "{{ translation_profiles }}" 
 
-
-  - name: Configure dial-peer 
-    include: ./dialpeer.yaml
+    #add dial-peers one by one
+  - name: Configure dial-peer
+    include: tasks/dialpeer.yaml
       dialpeer_description={{ item.dialpeer_description }}
       destination_pattern={{ item.destination_pattern }}
       uri_from={{ item.uri_from }}
@@ -58,13 +66,4 @@
       cucm_address={{ item.cucm_address }}
       codec_class_number={{ item.codec_class_number }}
       dialpeer_number={{ item.dialpeer_number }}
-    with_list: 
-      - { dialpeer_number: '3825991', dialpeer_description: 'Incoming_382599', answer_address: '382599....', translate_leg: 'incoming', translation_rule_number: '3825991', codec_class_number: '1' }
-      - { dialpeer_number: '3825990', dialpeer_description: 'Outgoing_382', destination_pattern: '382....%', translate_leg: 'outgoing', translation_rule_number: '3825990', codec_class_number: '1' }
-      - { dialpeer_number: '3825991_1', dialpeer_description: 'Incoming_382599_1', answer_address: '3......',  codec_class_number: '1' }
-      - { dialpeer_number: '3820001', dialpeer_description: 'Incoming_382', uri_from: '382', translate_leg: 'incoming', translation_rule_number: '3820001', codec_class_number: '1' }
-      - { dialpeer_number: '3820000', dialpeer_description: 'Outgoing_to_CUCM_382', destination_pattern: '3..000....', translate_leg: 'incoming', translation_rule_number: '3000001', cucm_address: 'ipv4:CUCM_ADDRSS_CALLMN', codec_class_number: '1' }
-    register: out
-  - debug: var=out.stdout_lines
-  
-  #become: yes
+    with_items: "{{ dialpeers }}" 

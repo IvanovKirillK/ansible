@@ -1,10 +1,5 @@
 ---
-- name: clear translation-rule {{ translation_rule_number }}
-  when: translation_rule_number is defined
-  ignore_errors: true
-  ios_config:
-    lines: no voice translation-rule {{ translation_rule_number }}
-
+# add translation rule
 - name: configure translation-rule {{ translation_rule_number }}
   when: rule_number is defined and rule_pattern is defined
   ios_config:

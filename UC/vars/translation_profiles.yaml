@@ -1,0 +1,24 @@
+translation_profiles:
+#  - translation_profile_number: '3825991'
+#    translation_direction: 'calling'
+#    translation_rule_number: '3000001'
+
+#  - translation_profile_number: '3825991'
+#    translation_direction: 'called'
+#    translation_rule_number: '3825991'
+
+  - translation_profile_number: '3825990'
+    translation_direction: 'calling'
+    translation_rule_number: '3820010'
+
+  - translation_profile_number: '3825990'
+    translation_direction: 'called'
+    translation_rule_number: '3000002'
+
+  - translation_profile_number: '3820001'
+    translation_direction: 'calling'
+    translation_rule_number: '3820001'
+    
+  - translation_profile_number: '3820002'
+    translation_direction: 'called'
+    translation_rule_number: '3820002'

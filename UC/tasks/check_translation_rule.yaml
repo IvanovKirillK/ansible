@@ -1,0 +1,17 @@
+---
+#register variable for for running_config check
+- name: set_translation_rule_var
+  set_fact:
+    translation_rule_string: "voice translation-rule {{ translation_rule_number }}"
+
+#get running config, sort for translation_rule
+- name: get_running
+  register: translation_rule
+  ios_command:
+    commands: show run | i voice translation-rule {{ translation_rule_number }}
+
+#check if translation_rule exesits on device
+- name: check_translation_rule
+  when: translation_rule_string == translation_rule.stdout[0]
+  fail: msg="!!! WARNING translation_rule {{ translation_rule_number }} exist on {{ inventory_hostname }}, please check config !!!"
+  

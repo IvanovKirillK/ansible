@@ -1,25 +1,12 @@
 ---
-# check if dialpeer exists
-- name: get_dialpeer
-  #register variable for output
-  set_fact:
-    dialpeer_string = dial-peer voice {{ dialpeer_number }} voip
-  register: dialpeer
-  ios_config:
-    lines: show run | i dial-peer voice {{ dialpeer_number }} voip
-
-- name: check_dialpeer
-  # if the community is not in running configuration...
-  fail: msg="!!!dial-peer exist, please chek config!!!"
-  when: ("dialpeer_string == dialpeer.stdout_lines[0]")
-  # ...set a variable with name "changed"...
-
+#add dial-peer
 - name: add dialpeer {{ dialpeer_number }}
   when: dialpeer_number is defined
   ios_config:
     match: line
     lines: dial-peer voice {{ dialpeer_number }} voip
 
+#add dial-peer parameters
 - name: configure dialpeer {{ dialpeer_number }} description
   when: dialpeer_description is defined
   ignore_errors: true
@@ -28,6 +15,7 @@
     commands: description {{ dialpeer_description }}
     parents: dial-peer voice {{ dialpeer_number }} voip
 
+#add dial-peer parameters
 - name: configure dialpeer {{ dialpeer_number }} destination_pattern
   when: destination_pattern is defined
   ignore_errors: true  
@@ -36,6 +24,7 @@
     commands: destination-pattern {{ destination_pattern }}
     parents: dial-peer voice {{ dialpeer_number }} voip
 
+#add dial-peer parameters
 - name: configure dialpeer {{ dialpeer_number }} uri_from
   when: uri_from is defined
   ignore_errors: true
@@ -44,6 +33,7 @@
     commands: incoming uri from {{ uri_from }}
     parents: dial-peer voice {{ dialpeer_number }} voip
 
+#add dial-peer parameters
 - name: configure dialpeer {{ dialpeer_number }} translation_rule
   when: translate_leg is defined and translation_rule_number is defined
   ignore_errors: true
@@ -52,6 +42,7 @@
     commands: translate {{ translate_leg }} {{ translation_rule_number }}
     parents: dial-peer voice {{ dialpeer_number }} voip
 
+#add dial-peer parameters
 - name: configure dialpeer {{ dialpeer_number }} answer_address
   when: answer_address is defined
   ignore_errors: true
@@ -60,6 +51,7 @@
     commands: answer-address {{ answer_address }}
     parents: dial-peer voice {{ dialpeer_number }} voip
 
+#add dial-peer parameters
 - name: configure dialpeer {{ dialpeer_number }} session_protocol
   ignore_errors: true
   ios_config:
@@ -69,6 +61,7 @@
       - dtmf-relay rtp-nte
     parents: dial-peer voice {{ dialpeer_number }} voip
 
+#add dial-peer parameters
 - name: configure dialpeer {{ dialpeer_number }} codec_class
   when: codec_class_number is defined
   ignore_errors: true
@@ -77,7 +70,8 @@
     commands: voice class codec {{ codec_class_number }}
     parents: dial-peer voice {{ dialpeer_number }} voip
 
-- name: configure dialpeer {{ dialpeer_number }} codec_class
+#add dial-peer parameters
+- name: configure dialpeer {{ dialpeer_number }} cucm_address
   when: cucm_address is defined
   ignore_errors: true
   ios_config:
