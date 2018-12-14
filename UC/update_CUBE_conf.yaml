@@ -2,17 +2,21 @@
 - name: Update CUBE configuration
   hosts: GPB_CUBE
   tasks:
-  #run show run on a device
-  - name: run show running-config on remote devices
-    ios_command:
-      commands: show running
-    register: config
+  # #run show run on a device
+  # - name: run show running-config on remote devices
+  #   ios_command:
+  #     commands: show running
+  #   register: config
 
-  #save running-config on a local drive
-  - name: Save config to local file
-    copy:
-      content: "{{ config.stdout[0] }}"
-      dest: "/etc/ansible/backup/{{ inventory_hostname }}/running-config_{{lookup('pipe','date +%Y%m%d_%H:%M:%S')}}"
+  # #save running-config on a local drive
+  # - name: Save config to local file
+  #   copy:
+  #     content: "{{ config.stdout[0] }}"
+  #     dest: "/etc/ansible/backup/{{ inventory_hostname }}/running-config_{{lookup('pipe','date +%Y%m%d_%H:%M:%S')}}"
+
+  - name: backup
+    ios_config:
+      backup: yes
 
   #load variables for translations and dial-peers
   - name: Load vars
@@ -63,7 +67,7 @@
       destination_pattern={{ item.destination_pattern }}
       uri_from={{ item.uri_from }}
       translate_leg={{ item.translate_leg }}
-      translation_rule_number={{ item.translation_rule_number }}
+      translation_profile_number={{ item.translation_profile_number }}
       answer_address={{ item.answer_address }}
       cucm_address={{ item.cucm_address }}
       codec_class_number={{ item.codec_class_number }}

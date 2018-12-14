@@ -6,6 +6,11 @@ translation_profiles:
 #translation_rule_number: 'xxxx'
 ##############################################
 
+##############################################
+#Default: Do not delete!
+ - translation_profile_number: 'not_set'
+##############################################
+
 #  - translation_profile_number: '3825991'
 #    translation_direction: 'calling'
 #    translation_rule_number: '3000001'
@@ -14,18 +19,18 @@ translation_profiles:
 #    translation_direction: 'called'
 #    translation_rule_number: '3825991'
 
-  - translation_profile_number: '3825990'
-    translation_direction: 'calling'
-    translation_rule_number: '3820010'
+  # - translation_profile_number: '3825990'
+  #   translation_direction: 'calling'
+  #   translation_rule_number: '3820010'
 
-  - translation_profile_number: '3825990'
-    translation_direction: 'called'
-    translation_rule_number: '3000002'
+  # - translation_profile_number: '3825990'
+  #   translation_direction: 'called'
+  #   translation_rule_number: '3000002'
 
-  - translation_profile_number: '3820001'
-    translation_direction: 'calling'
-    translation_rule_number: '3820001'
+  # - translation_profile_number: '3820001'
+  #   translation_direction: 'calling'
+  #   translation_rule_number: '3820001'
     
-  - translation_profile_number: '3820002'
-    translation_direction: 'called'
-    translation_rule_number: '3820002'
+  # - translation_profile_number: '3820002'
+  #   translation_direction: 'called'
+  #   translation_rule_number: '3820002'

@@ -6,9 +6,14 @@ translation_rules:
 #rule_pattern: 'xxxx'
 ###########################################
 
-#  - translation_rule_number: '3000001'
-#    rule_number: '1'
-#    rule_pattern: '/^\(...\)\(...\)\(....\)/ /\1\3/'
+###########################################
+#Default: Do not delete!
+ - translation_rule_number: 'not_set'
+###########################################
+
+ # - translation_rule_number: '3000001'
+ #   rule_number: '1'
+ #   rule_pattern: '/^\(...\)\(...\)\(....\)/ /\1\3/'
 
 #  - translation_rule_number: '3825991'
 #    rule_number: '1'
@@ -18,9 +23,9 @@ translation_rules:
 #    rule_number: '2'
 #    rule_pattern: '/.+/ /382599\0/'
 
-  - translation_rule_number: '3820010'
-    rule_number: '1'
-    rule_pattern: '/^382/ //'
+  # - translation_rule_number: '3820010'
+  #   rule_number: '1'
+  #   rule_pattern: '/^382/ //'
 
 #  - translation_rule_number: '3000002'
 #    rule_number: '1'
@@ -30,6 +35,6 @@ translation_rules:
 #    rule_number: '1'
 #    rule_pattern: '/^….$/ /382\0/'
 
-  - translation_rule_number: '3820002'
-    rule_number: '1'
-    rule_pattern: '/^….$/ /382000\0/'    
+  # - translation_rule_number: '3820002'
+  #   rule_number: '1'
+  #   rule_pattern: '/^….$/ /382000\0/'    
