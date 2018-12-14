@@ -12,12 +12,12 @@ dialpeers:
 #cucm_address: ''
 #####################################
 
-#  - dialpeer_number: '3825991'
-#    dialpeer_description: 'Incoming_382599'
-#    answer_address: '382599....'
-#    translate_leg: 'incoming'
-#    translation_rule_number: '3825991'
-#    codec_class_number: '1'
+  - dialpeer_number: '3825991'
+    dialpeer_description: 'Incoming_382599'
+    answer_address: '382599....'
+    translate_leg: 'incoming'
+    translation_rule_number: '3825991'
+    codec_class_number: '1'
   
 #  - dialpeer_number: '3825990'
 #    dialpeer_description: 'Outgoing_382'
