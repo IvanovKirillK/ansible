@@ -75,6 +75,16 @@
     register: config
   - debug: var=config.stdout_lines
 
+  # find .yaml files in vars dir
+  - name: find yaml var files
+    find:
+      path: /home/kirill/ansible/UC/vars/
+      patterns: '*.yaml'
+    register: files_to_rename
+
+  # rename .yaml files in vars dir to .yaml.bak
   - name: rename variable files on localhost
-    local_action: command rename 's/\.yaml$/\.bak/' /home/kirill/ansible/UC/vars/*.yaml
+    delegate_to: localhost
+    command: mv "{{ item.path }}" "{{ item.path }}".bak
+    with_items: "{{ files_to_rename.files }}"
     ignore_errors: true

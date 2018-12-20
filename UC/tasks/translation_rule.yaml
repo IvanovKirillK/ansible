@@ -1,7 +1,7 @@
 ---
 # add translation rule
 - name: configure translation-rule {{ translation_rule_number }}
-  when: rule_number is defined and rule_pattern is defined
+  when: rule_number is defined and rule_pattern is defined and rule_number != False and rule_pattern != False
   ios_config:
     commands: rule {{ rule_number }} {{ rule_pattern }}
     parents: voice translation-rule {{ translation_rule_number }}

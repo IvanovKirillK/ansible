@@ -14,6 +14,6 @@
 
 #check if dial-peer exesits on device
 - name: check if dialpeer {{ dialpeer_number }} exists on device
-  when: (dialpeer_number is defined) and (dialpeer_string == dialpeer.stdout[0]) and (dialpeer_number != False)
+  when: (dialpeer_number is defined and dialpeer_number != False) and (dialpeer_string == dialpeer.stdout[0])
   fail: msg="!!! WARNING dial-peer {{ dialpeer_number }} exists on {{ inventory_hostname }}, please chek config !!!"
   
