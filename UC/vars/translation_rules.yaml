@@ -6,11 +6,6 @@ translation_rules:
 #rule_pattern: 'xxxx'
 ###########################################
 
-###########################################
-#Default: Do not delete!
- - translation_rule_number: 'not_set'
-###########################################
-
  # - translation_rule_number: '3000001'
  #   rule_number: '1'
  #   rule_pattern: '/^\(...\)\(...\)\(....\)/ /\1\3/'

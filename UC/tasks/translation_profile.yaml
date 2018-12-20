@@ -1,8 +1,7 @@
 ---
 # add translation profile
-- name: configure translation-profile {{ translation_profile_number }}
-  when: translation_direction is defined and translation_rule_number is defined
-  ignore_errors: true
+- name: configure translation-profile {{ translation_profile_name }}
+  when: translation_direction is defined and translation_profile_name is defined and translation_direction != False and translation_profile_name != False
   ios_config:
-    commands: translate {{ translation_direction }} {{ translation_rule_number }}
+    commands: translate {{ translation_direction }} {{ translation_profile_name }}
     parents: voice translation-profile {{ translation_profile_number }}

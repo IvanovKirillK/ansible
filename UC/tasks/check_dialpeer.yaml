@@ -1,20 +1,19 @@
 ---
 #register variable for for running_config check
 - name: set dialpeer variable for future use
-  when: dialpeer_number is defined
+  when: dialpeer_number is defined and dialpeer_number != False
   set_fact:
     dialpeer_string: "dial-peer voice {{ dialpeer_number }} voip"
 
 #get running config, sort for dial-peer
 - name: get running config for dial-peer {{ dialpeer_number }}
-  when: dialpeer_number is defined
+  when: dialpeer_number is defined and dialpeer_number != False
   register: dialpeer
   ios_command:
     commands: show run | i dial-peer voice {{ dialpeer_number }} voip
-  
 
 #check if dial-peer exesits on device
 - name: check if dialpeer {{ dialpeer_number }} exists on device
-  when: (dialpeer_number is defined) and (dialpeer_string == dialpeer.stdout[0])
+  when: (dialpeer_number is defined) and (dialpeer_string == dialpeer.stdout[0]) and (dialpeer_number != False)
   fail: msg="!!! WARNING dial-peer {{ dialpeer_number }} exists on {{ inventory_hostname }}, please chek config !!!"
   

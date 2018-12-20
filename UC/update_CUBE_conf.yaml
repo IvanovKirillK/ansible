@@ -18,49 +18,54 @@
   #check if specified translations rules are already exist
   - name: Check translation rules in new config
     include: tasks/check_translation_rule.yaml
-      translation_rule_number={{ item.translation_rule_number }}
+      translation_rule_number={{ item.translation_rule_number | default('False') }}
     with_items: "{{ translation_rules }}" 
 
   #check if specified translations profiles are already exist
   - name: Check translation profiles in new config
     include: tasks/check_translation_profile.yaml
-      translation_profile_number={{ item.translation_profile_number }}
+      translation_profile_name={{ item.translation_profile_name | default('False') }}
     with_items: "{{ translation_profiles }}" 
 
   #check if specified dial-peers are already exist
   - name: Check dialpeers in new config
     include: tasks/check_dialpeer.yaml
-      dialpeer_number={{ item.dialpeer_number }}
+      dialpeer_number={{ item.dialpeer_number | default('False') }}
     with_items: "{{ dialpeers }}" 
 
   #add translation rules one by one
   - name: Configure translation rule 
     include: tasks/translation_rule.yaml
-      translation_rule_number={{ item.translation_rule_number }}
-      rule_number={{ item.rule_number }}
-      rule_pattern={{ item.rule_pattern }}
+      translation_rule_number={{ item.translation_rule_number | default('False') }}
+      rule_number={{ item.rule_number | default('False') }}
+      rule_pattern={{ item.rule_pattern | default('False') }}
     with_items: "{{ translation_rules }}"  
 
   #add translation profiles one by one  
   - name: Configure translation profile 
     include: tasks/translation_profile.yaml
-      translation_profile_number={{ item.translation_profile_number }}
-      translation_direction={{ item.translation_direction }}
-      translation_rule_number={{ item.translation_rule_number }}
+      translation_profile_name={{ item.translation_profile_name | default('False') }}
+      translation_direction={{ item.translation_direction | default('False') }}
+      translation_rule_number={{ item.translation_rule_number | default('False') }}
     with_items: "{{ translation_profiles }}" 
 
     #add dial-peers one by one
   - name: Configure dial-peer
     include: tasks/dialpeer.yaml
-      dialpeer_description={{ item.dialpeer_description }}
-      destination_pattern={{ item.destination_pattern }}
-      uri_from={{ item.uri_from }}
-      translate_leg={{ item.translate_leg }}
-      translation_profile_number={{ item.translation_profile_number }}
-      answer_address={{ item.answer_address }}
-      cucm_address={{ item.cucm_address }}
-      codec_class_number={{ item.codec_class_number }}
-      dialpeer_number={{ item.dialpeer_number }}
+      dialpeer_number={{ item.dialpeer_number | default('False') }}
+      dialpeer_description={{ item.dialpeer_description | default('False') }}
+      destination_pattern={{ item.destination_pattern | default('False') }}
+      answer_address={{ item.answer_address | default('False') }}
+      translate_leg={{ item.translate_leg | default('False') }}
+      translation_profile_name={{ item.translation_profile_name | default('False') }}
+      bind_string={{ item.bind_string | default('False') }}
+      session_protocol={{ item.session_protocol | default('False') }}
+      dtmf_relay_name={{ item.dtmf_relay_name | default('False') }}
+      uri_from={{ item.uri_from | default('False') }}
+      cucm_address={{ item.cucm_address | default('False') }}
+      codec_class_number={{ item.codec_class_number | default('False') }}
+      codec_name={{ item.codec_name | default('False') }}
+      vad_mode={{ item.vad_mode | default('False') }}
     with_items: "{{ dialpeers }}" 
 
   # show running config 

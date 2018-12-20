@@ -1,72 +1,84 @@
 ---
-#add dial-peer
-# - name: add dialpeer {{ dialpeer_number }}
-#   when: dialpeer_number is defined
-#   ios_config:
-#     match: line
-#     lines: dial-peer voice {{ dialpeer_number }} voip
-
 #add dial-peer description
 - name: configure dialpeer {{ dialpeer_number }} description
-  when: dialpeer_description is defined
-  ignore_errors: true
+  when: dialpeer_description is defined and dialpeer_description != False
   ios_config:
     commands: description {{ dialpeer_description }}
     parents: dial-peer voice {{ dialpeer_number }} voip
 
 #add dial-peer destination_pattern
 - name: configure dialpeer {{ dialpeer_number }} destination_pattern
-  when: destination_pattern is defined
-  ignore_errors: true  
+  when: destination_pattern is defined and destination_pattern != False
   ios_config:
     commands: destination-pattern {{ destination_pattern }}
     parents: dial-peer voice {{ dialpeer_number }} voip
 
-#add dial-peer uri_from
-- name: configure dialpeer {{ dialpeer_number }} uri_from
-  when: uri_from is defined
-  ignore_errors: true
-  ios_config:
-    commands: incoming uri from {{ uri_from }}
-    parents: dial-peer voice {{ dialpeer_number }} voip
-
-#add dial-peer translation_profile
-- name: configure dialpeer {{ dialpeer_number }} translation_profile
-  when: translate_leg is defined and translation_profile_number is defined
-  ignore_errors: true
-  ios_config:
-    commands: translation-profile {{ translate_leg }} {{ translation_profile_number }}
-    parents: dial-peer voice {{ dialpeer_number }} voip
-
 #add dial-peer answer_address
 - name: configure dialpeer {{ dialpeer_number }} answer_address
-  when: answer_address is defined
-  ignore_errors: true
+  when: answer_address is defined and answer_address != False
   ios_config:
     commands: answer-address {{ answer_address }}
     parents: dial-peer voice {{ dialpeer_number }} voip
 
+#add dial-peer translation_profile
+- name: configure dialpeer {{ dialpeer_number }} translation_profile
+  when: translate_leg is defined and translation_profile_name is defined and translate_leg != False and  translation_profile_name != False
+  ios_config:
+    commands: translation-profile {{ translate_leg }} {{ translation_profile_name }}
+    parents: dial-peer voice {{ dialpeer_number }} voip
+
+#add dial-peer bind parameters
+- name: configure dialpeer {{ dialpeer_number }} binding
+  when: bind_string is defined and bind_string != False
+  ios_config:
+    commands: bind {{ bind_string }}
+    parents: dial-peer voice {{ dialpeer_number }} voip
+
 #add dial-peer session_protocol
 - name: configure dialpeer {{ dialpeer_number }} session_protocol
-  ignore_errors: true
+  when: session_protocol is defined and session_protocol != False
   ios_config:
-    commands: 
-      - session protocol sipv2
-      - dtmf-relay rtp-nte
+    commands: session protocol {{ session_protocol }}
+    parents: dial-peer voice {{ dialpeer_number }} voip
+
+#add dial-peer dtmf-relay
+- name: configure dialpeer {{ dialpeer_number }} dtmf_relay
+  when: dtmf_relay_name is defined and dtmf_relay_name != False
+  ios_config:
+    commands: dtmf-relay {{ dtmf_relay_name }}
+    parents: dial-peer voice {{ dialpeer_number }} voip
+
+#add dial-peer uri_from
+- name: configure dialpeer {{ dialpeer_number }} uri_from
+  when: uri_from is defined and uri_from != False
+  ios_config:
+    commands: incoming uri from {{ uri_from }}
     parents: dial-peer voice {{ dialpeer_number }} voip
 
 #add dial-peer codec_class
 - name: configure dialpeer {{ dialpeer_number }} codec_class
-  when: codec_class_number is defined
-  ignore_errors: true
+  when: codec_class_number is defined and codec_class_number != False
   ios_config:
     commands: voice class codec {{ codec_class_number }}
     parents: dial-peer voice {{ dialpeer_number }} voip
 
+#add dial-peer codec_name
+- name: configure dialpeer {{ dialpeer_number }} codec_name
+  when: codec_name is defined and codec_name != False
+  ios_config:
+    commands: codec {{ codec_name }}
+    parents: dial-peer voice {{ dialpeer_number }} voip
+
 #add dial-peer cucm_address
 - name: configure dialpeer {{ dialpeer_number }} cucm_address
-  when: cucm_address is defined
-  ignore_errors: true
+  when: cucm_address is defined and cucm_address != False
   ios_config:
     commands: session target ipv4:{{ cucm_address }}
+    parents: dial-peer voice {{ dialpeer_number }} voip
+
+#add dial-peer vad_mode
+- name: configure dialpeer {{ dialpeer_number }} vad_mode
+  when: (vad_mode is defined and vad_mode != False)
+  ios_config:
+    commands: no vad
     parents: dial-peer voice {{ dialpeer_number }} voip

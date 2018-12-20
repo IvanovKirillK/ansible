@@ -1,9 +1,9 @@
 Building configuration...
 
 
-Current configuration : 3377 bytes
+Current configuration : 3398 bytes
 !
-! Last configuration change at 18:30:00 UTC Fri Dec 14 2018 by admin
+! Last configuration change at 07:53:00 UTC Wed Dec 19 2018 by admin
 version 15.1
 service timestamps debug datetime msec
 service timestamps log datetime msec
@@ -80,7 +80,7 @@ voice translation-rule 3000003
  rule 1 /^/ //
 !
 voice translation-rule 3820001
- rule 1 /^....$/ /382\0/
+ rule 1 /^00/ /3/
 !
 voice translation-rule 3825991
  rule 1 /^382..../ /\0/
@@ -175,6 +175,8 @@ dial-peer voice 3825990 voip
  session protocol sipv2
  session target ipv4:10.11.2.3
  dtmf-relay rtp-nte
+!
+dial-peer voice 1001 voip
 !
 !
 !

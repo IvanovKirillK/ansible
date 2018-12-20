@@ -12,6 +12,6 @@
 
 #check if translation_rule exesits on device
 - name: check if translation rule {{ translation_rule_number }} exists on device
-  when: translation_rule_string == translation_rule.stdout[0]
+  when: translation_rule_string == translation_rule.stdout[0] and translation_rule_number != False
   fail: msg="!!! WARNING translation_rule {{ translation_rule_number }} exist on {{ inventory_hostname }}, please check config !!!"
   
